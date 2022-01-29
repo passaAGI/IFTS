@@ -103,7 +103,7 @@
         $maxVal = $courses_temp[0]['n_partecipanti'];
         for ($m = 1; $m < (count($courses_temp)-1); $m++) {
             if ($courses_temp[$m]['n_partecipanti'] == $maxVal) {
-                //array_push($courses_temp[$m], $maxParticipants); NON FUNZIONA
+                //array_push($maxParticipants, $courses_temp[$m]);
                 $maxParticipants[$m] = $courses_temp[$m];
             }
         }
