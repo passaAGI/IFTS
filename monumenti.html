@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API REST - Monumenti di Brema</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">
+            I Monumenti di Brema
+        </h1>
+        <form id="form">
+            <div class="form-group container">
+            <label for="url">URL sito:</label>
+            <input type="text" class="form-control" name="" id="url" placeholder="Digita l'indirizzo URL del sito WordPress" value="https://ifts002.adriatic.net/" required>
+            </div>
+            <div class="form-group container">
+                <label for="number">Numero post da mostrare:</label>
+                <input type="number" class="form-control" value="10" id="number" required>
+            </div>
+            <div class="form-group container">
+                <button class="btn btn-danger btn-block">
+                    Mostra lista monumenti
+                </button>
+            </div>
+        </form>
+        <div id="result">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>titolo_post</th>
+                        <th>data_pubblicazione_post</th>
+                    </tr>
+                </thead>
+                <tbody id="data">
+ 
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $("#form").submit((e) => {
+        e.preventDefault()
+ 
+        var url = $("#url").val()
+ 
+        var number = $("#number").val()
+ 
+        getBlogPosts(url,number)
+    })
+ 
+    $("#number").change((e) => {
+        number = $(this).val()
+    })
+ 
+    function getBlogPosts(url,number){
+        $("#data").html('')
+        $.ajax({
+            method:"GET",
+            url:url + `/wp-json/wp/v2/monumento?_fields[]=title&_fields[]=link&_fields[]=date&per_page=` + number,
+            success:function(data){
+                console.log(data)
+ 
+                data.forEach(post => {
+                    $("#data").append(`
+                    
+                    <tr>
+                        <td><a href="${post.link}" target="_blank">${post.title.rendered}</a></td>
+                        <td>${post.date}</td>
+                    </tr>
+
+                    `)
+                });
+            }
+        })
+    }
+</script>
+</html>
